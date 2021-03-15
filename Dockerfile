@@ -9,9 +9,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y gpg-agent wget 
     python3.8 -m pip install tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl && \
     rm tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl 
     ## && (apt-get autoremove -y; apt-get autoclean -y; apt-get clean)
+RUN apt-get update && apt-get install -y --reinstall libfontconfig1 libfontconfig1-dev
 ENV FONTCONFIG_PATH=/etc/fonts
 RUN fc-cache -f -v
-RUN apt-get update && apt-get install -y --reinstall libfontconfig1 libfontconfig1-dev
 RUN apt-get update && apt-get install --no-install-recommends -y \
     linux-tools-generic pciutils psmisc tmux vainfo \
     asciidoc-base bison cython3 docbook-xsl flex gcc g++ git \
