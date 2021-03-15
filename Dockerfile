@@ -1,5 +1,5 @@
 FROM blakeblackshear/frigate:stable-amd64
-RUN apt-get update && apt-get install --no-install-recommends -y gpg-agent wget && \
+RUN apt-get update && apt-get install --no-install-recommends -y apt-utils gpg-agent wget && \
     wget -qO - https://repositories.intel.com/graphics/intel-graphics.key | apt-key add - && \
     echo "deb [arch=amd64] https://repositories.intel.com/graphics/ubuntu focal main" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
     apt-get update && \
@@ -7,14 +7,14 @@ RUN apt-get update && apt-get install --no-install-recommends -y gpg-agent wget 
     intel-media-va-driver-non-free libmfx1 libmfx-tools libgomp1 && \
     wget -q https://github.com/google-coral/pycoral/releases/download/v1.0.1/tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl && \
     python3.8 -m pip install tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl && \
-    rm tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl 
-    ## && (apt-get autoremove -y; apt-get autoclean -y; apt-get clean)
+    rm tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl && \
+    apt-get full-upgrade -y && apt-get autoremove -y && apt-get autoclean -y && apt-get clean
 ENV FONTCONFIG_PATH=/usr/bin/fc-cache
 ENV FONTCONFIG_FILE=/etc/fonts
-RUN /usr/local/lib/libfreetype.so.6 && \
-    apt-get update && apt-get install --no-install-recommends -y \
+RUN rm -rf /usr/local/lib/libfreetype.so.6 && apt-get update && apt-get install --no-install-recommends -y \
     linux-tools-generic pciutils psmisc tmux vainfo \
-    asciidoc-base bison cython3 docbook-xsl flex gcc g++ git \
+    asciidoc-base bison flex gcc g++ git \
+    libwebpmux3 librsvg2-2 libx264-155 libx265-179 \
     libcairo-dev libdrm-dev libdw-dev libkmod-dev libmfx-dev libpciaccess-dev \
     libpixman-1-dev libprocps-dev libudev-dev libva-dev libx264-dev libx265-dev \
     libmp3lame-dev libopenjp2-7-dev librsvg2-dev libtheora-dev \
@@ -36,7 +36,6 @@ RUN /usr/local/lib/libfreetype.so.6 && \
     --enable-libx264 \
     --enable-libx265 \
     --enable-version3 \
-    --enable-libvmaf \
     --enable-libdrm \
     --enable-libfdk-aac \
     --enable-libmp3lame \
@@ -66,8 +65,9 @@ RUN /usr/local/lib/libfreetype.so.6 && \
     export LIBVA_DRIVER_NAME=iHD &&\
     make && \
     make install && \
-    hash -r && \
-    usermod -aG video,audio,render,plugdev,dialout,voice,avahi $USER && \
+    #hash -r && \
+    #groupadd -f render && \
+    #usermod -aG video $USER && \
     apt purge -y comerr-dev flite1-dev frei0r-plugins-dev gir1.2-freedesktop \
     gir1.2-gdkpixbuf-2.0 gir1.2-harfbuzz-0.0 gir1.2-ibus-1.0 gir1.2-rsvg-2.0 \
     icu-devtools krb5-multidev ladspa-sdk libaom-dev libasound2-dev libass-dev \
