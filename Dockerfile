@@ -58,7 +58,7 @@ RUN apt-get install --no-install-recommends -y \
     --extra-cflags="-I/opt/ffmpeg/include" \
     --extra-libs="-lpthread -lm" \
     --extra-libs="-ldl" \
-    --extra-ldflags="-L/opt/ffmpeg/lib"
+    --extra-ldflags="-L/opt/ffmpeg/lib" \
     --prefix="/opt/ffmpeg" \
     --toolchain=hardened && \
     export LIBVA_DRIVER_NAME=iHD &&\
