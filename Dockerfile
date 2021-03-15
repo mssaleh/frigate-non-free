@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y gpg-agent wget 
     rm tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl 
     ## && (apt-get autoremove -y; apt-get autoclean -y; apt-get clean)
 ENV FONTCONFIG_PATH=/etc/fonts
+RUN fc-cache -f -v
 RUN apt-get update && apt-get install -y --reinstall libfontconfig1 libfontconfig1-dev
 RUN apt-get update && apt-get install --no-install-recommends -y \
     linux-tools-generic pciutils psmisc tmux vainfo \
