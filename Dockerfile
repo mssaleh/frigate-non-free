@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y gpg-agent wget 
 RUN apt-get update && apt-get install -y --reinstall libfontconfig1 libfontconfig1-dev
 ENV FONTCONFIG_PATH=/usr/bin/fc-cache
 ENV FONTCONFIG_FILE=/etc/fonts
-RUN fc-cache -f -v
+RUN /usr/bin/fc-cache -f -v
 RUN apt-get update && apt-get install --no-install-recommends -y \
     linux-tools-generic pciutils psmisc tmux vainfo \
     asciidoc-base bison cython3 docbook-xsl flex gcc g++ git \
