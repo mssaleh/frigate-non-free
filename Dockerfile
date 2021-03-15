@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y gpg-agent wget 
     ## && (apt-get autoremove -y; apt-get autoclean -y; apt-get clean)
 ENV FONTCONFIG_PATH=/usr/bin/fc-cache
 ENV FONTCONFIG_FILE=/etc/fonts
-RUN /usr/local/lib/libfreetype.so.6
+RUN /usr/local/lib/libfreetype.so.6 && \
     apt-get update && apt-get install --no-install-recommends -y \
     linux-tools-generic pciutils psmisc tmux vainfo \
     asciidoc-base bison cython3 docbook-xsl flex gcc g++ git \
