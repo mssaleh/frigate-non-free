@@ -4,8 +4,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y apt-utils gpg-a
     echo "deb [arch=amd64] https://repositories.intel.com/graphics/ubuntu focal main" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
     apt-get update && \
     apt-get install --no-install-recommends -y intel-opencl-icd libva-drm2 libva2 intel-level-zero-gpu level-zero vainfo \
-    intel-media-va-driver-non-free libmfx1 libmfx-tools libgomp1 libfdk-aac1 libmp3lame0 libopenjp2-7 libopus0 librsvg2-2 \
-    libtheora0 libvidstab1.1 libvorbis0a libvpx6 libwebp6 libxvidcore4 libzmq5 librtmp1 && \
+    intel-media-va-driver-non-free libmfx1 libmfx-tools libgomp1 && \
     wget -q https://github.com/google-coral/pycoral/releases/download/v1.0.1/tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl && \
     python3.8 -m pip install tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl && \
     rm tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl && \
@@ -21,6 +20,8 @@ RUN rm -rf /usr/local/lib/libfreetype.so.6 && apt-get update && apt-get install 
     libmp3lame-dev libopenjp2-7-dev librsvg2-dev libtheora-dev \
     libvidstab-dev libvorbis-dev libvpx-dev libwebp-dev libx265-dev libnuma-dev libssl-dev \
     libopus-dev librtmp-dev libxvidcore-dev libzmq3-dev ocl-icd-opencl-dev libfdk-aac-dev \
+    libfdk-aac1 libmp3lame0 libopenjp2-7 libopus0 librsvg2-2 \
+    libtheora0 libvidstab1.1 libvorbis0a libvpx6 libwebp6 libxvidcore4 libzmq5 librtmp1 \
     make pkg-config xsltproc yasm && \
     mkdir -p /opt/ffmpeg_sources && \
     cd /opt/ffmpeg_sources && \
