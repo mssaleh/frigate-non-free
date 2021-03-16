@@ -1,76 +1,111 @@
 FROM blakeblackshear/frigate:stable-amd64
-RUN apt-get update && apt-get install --no-install-recommends -y apt-utils gpg-agent wget && \
-    wget -qO - https://repositories.intel.com/graphics/intel-graphics.key | apt-key add - && \
-    echo "deb [arch=amd64] https://repositories.intel.com/graphics/ubuntu focal main" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-    apt-get update && \
-    apt-get install --no-install-recommends -y intel-opencl-icd libva-drm2 libva2 intel-level-zero-gpu level-zero vainfo \
-    intel-media-va-driver-non-free libmfx1 libmfx-tools libgomp1 && \
-    wget -q https://github.com/google-coral/pycoral/releases/download/v1.0.1/tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl && \
-    python3.8 -m pip install tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl && \
-    rm tflite_runtime-2.5.0-cp38-cp38-linux_x86_64.whl && \
-    apt-get full-upgrade -y && apt-get autoremove -y && apt-get autoclean -y && apt-get clean
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+    ca-certificates \
+    curl \
+    gpg-agent \
+    software-properties-common \
+    sudo
+
+ARG APT_GRAPHICS_REPO="https://repositories.intel.com/graphics/ubuntu focal main"
+RUN curl -fsSL https://repositories.intel.com/graphics/intel-graphics.key | apt-key add -
+RUN apt-add-repository "deb $APT_GRAPHICS_REPO"
+
 ENV FONTCONFIG_PATH=/usr/bin/fc-cache
 ENV FONTCONFIG_FILE=/etc/fonts
-RUN rm -rf /usr/local/lib/libfreetype.so.6 && apt-get update && apt-get install --no-install-recommends -y \
-    linux-tools-generic pciutils psmisc tmux vainfo \
-    asciidoc-base bison flex gcc g++ git \
-    libwebpmux3 librsvg2-2 libx264-155 libx265-179 \
-    libcairo-dev libdrm-dev libdw-dev libkmod-dev libmfx-dev libpciaccess-dev \
-    libpixman-1-dev libprocps-dev libudev-dev libva-dev libx264-dev libx265-dev \
-    libmp3lame-dev libopenjp2-7-dev librsvg2-dev libtheora-dev \
-    libvidstab-dev libvorbis-dev libvpx-dev libwebp-dev libx265-dev libnuma-dev libssl-dev \
-    libopus-dev librtmp-dev libxvidcore-dev libzmq3-dev ocl-icd-opencl-dev libfdk-aac-dev \
-    libfdk-aac1 libmp3lame0 libopenjp2-7 libopus0 librsvg2-2 \
-    libtheora0 libvidstab1.1 libvorbis0a libvpx6 libwebp6 libxvidcore4 libzmq5 librtmp1 \
-    make pkg-config xsltproc yasm && \
-    mkdir -p /opt/ffmpeg_sources && \
-    cd /opt/ffmpeg_sources && \
-    wget -O ffmpeg.tar.bz2 https://ffmpeg.org/releases/ffmpeg-4.3.2.tar.bz2 && \
-    tar xjvf ffmpeg.tar.bz2 && \
-    cd /opt/ffmpeg_sources/ffmpeg-4.3.2 && \
-    ./configure \
+RUN rm -rf /usr/local/lib/libfreetype.so.6
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
+    gcc \
+    g++ \
+    git \
+    libass-dev \
+    libdrm-dev \
+    libdw-dev \
+    libkmod-dev \
+    libmfx-dev \
+    libpciaccess-dev \
+    libpixman-1-dev \
+    libprocps-dev \
+    libtool \
+    libudev-dev \
+    libva-dev \
+    libx264-dev \
+    libx265-dev \
+    make \
+    meson \
+    pkg-config \
+    sudo \
+    xsltproc \
+    yasm \
+    zlib1g-dev \
+    libmp3lame-dev \
+    libopenjp2-7-dev \
+    librsvg2-dev \
+    libvidstab-dev \
+    libvorbis-dev \
+    libvpx-dev \
+    libwebp-dev \
+    libnuma-dev libssl-dev \
+    librtmp-dev \
+    libxvidcore-dev \
+    libzmq3-dev \
+    ocl-icd-opencl-dev \
+    libfdk-aac-dev
+
+ARG FFMPEG_VERSION=4.3.2
+ARG PREFIX=/opt/ffmpeg
+ARG FFMPEG_SRC=/opt/ffmpeg_sources
+
+RUN mkdir -p $FFMPEG_SRC \
+    && wget -O $FFMPEG_SRC/ffmpeg.tar.bz2 https://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 \
+    && cd $FFMPEG_SRC && tar xjvf ffmpeg.tar.bz2
+
+RUN cd $FFMPEG_SRC/ffmpeg-$FFMPEG_VERSION \
+    && ./configure \
     --bindir="/usr/local/bin" \
-    --disable-doc \
+    --prefix=$PREFIX \
+    --disable-static \
     --disable-ffplay \
+    --disable-doc \
+    --enable-shared \
     --enable-vaapi \
     --enable-libmfx \
     --enable-gpl \
     --enable-libx264 \
     --enable-libx265 \
     --enable-version3 \
-    --enable-libdrm \
-    --enable-libfdk-aac \
-    --enable-libmp3lame \
-    --enable-libopenjpeg \
-    --enable-libopus \
-    --enable-librsvg \
-    --enable-libtheora \
-    --enable-libvidstab \
-    --enable-libvorbis \
-    --enable-libvpx \
-    --enable-libwebp \
-    --enable-libxvid \
-    --enable-libzmq \
     --enable-nonfree \
-    --enable-opencl \
-    --enable-openssl \
     --enable-librtmp \
-    --enable-static \
+    --enable-opencl \
+    --enable-libfdk-aac \
+    --enable-libopenjpeg \
+    --enable-librsvg \
+    --enable-libmp3lame \
+    --enable-libvpx \
+    --enable-libzmq \
+    --enable-libwebp \
     --enable-swresample \
     --enable-swscale \
-    --extra-cflags="-I/opt/ffmpeg/include" \
+    --enable-openssl \
+    --enable-libvorbis \
+    --enable-libdrm \
+    --enable-libvidstab \
+    --enable-libxvid \
+    --extra-cflags="-I$PREFIX/include" \
     --extra-libs="-lpthread -lm" \
     --extra-libs="-ldl" \
-    --extra-ldflags="-L/opt/ffmpeg/lib" \
-    --prefix="/opt/ffmpeg" \
-    --toolchain=hardened && \
-    export LIBVA_DRIVER_NAME=iHD &&\
-    make && \
-    make install && \
-    #hash -r && \
-    #groupadd -f render && \
-    #usermod -aG video $USER && \
-    apt purge -y comerr-dev flite1-dev frei0r-plugins-dev gir1.2-freedesktop \
+    --extra-ldflags="-L$PREFIX/lib" \
+    --prefix="$PREFIX" \
+    --toolchain=hardened \
+    && make -j $(nproc --all) \
+    && sudo make install \
+    && rm -rf $FFMPEG_SRC \
+    && cp -r /opt/ffmpeg/lib/* /usr/local/lib/ \
+    && cp -r /opt/ffmpeg/include/* /usr/local/include/
+
+RUN apt purge -y comerr-dev flite1-dev frei0r-plugins-dev gir1.2-freedesktop \
     gir1.2-gdkpixbuf-2.0 gir1.2-harfbuzz-0.0 gir1.2-ibus-1.0 gir1.2-rsvg-2.0 \
     icu-devtools krb5-multidev ladspa-sdk libaom-dev libasound2-dev libass-dev \
     libauthen-sasl-perl libblkid-dev libbs2b-dev libcaca-dev libcairo2-dev \
@@ -110,6 +145,46 @@ RUN rm -rf /usr/local/lib/libfreetype.so.6 && apt-get update && apt-get install 
     ocaml-compiler-libs ocaml-findlib ocaml-interp ocaml-man ocaml-nox ocl-icd-opencl-dev \
     opencl-c-headers perl-openssl-defaults uuid-dev x11proto-core-dev x11proto-dev \
     x11proto-input-dev x11proto-randr-dev x11proto-scrnsaver-dev x11proto-xext-dev \
-    x11proto-xf86vidmode-dev x11proto-xinerama-dev xorg-sgml-doctools xtrans-dev yasm && \
-    rm -rf /opt/ffmpeg_sources && \
-    apt update && apt full-upgrade -y && apt autoremove --purge -y && apt autoclean -y && apt clean
+    x11proto-xf86vidmode-dev x11proto-xinerama-dev xorg-sgml-doctools xtrans-dev yasm \
+    && apt autoremove --purge -y && apt autoclean -y && apt clean
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    intel-media-va-driver-non-free \
+    libgomp1 \
+    libigfxcmrt7 \
+    libmfx1 \
+    libmfx-tools \
+    libnginx-mod-http-lua \
+    libnginx-mod-rtmp \
+    libva-drm2 \
+    libva-x11-2 \
+    libxcb-shm0 \
+    linux-tools-generic \
+    man-db \
+    nginx \
+    pciutils \
+    psmisc \
+    python3 \
+    python3-matplotlib \
+    python3-numpy \
+    python3-pip \
+    socat \
+    tmux \
+    vainfo \
+    $(apt-cache depends libx264-dev | grep Depends | grep libx264 | cut -d: -f2) \
+    $(apt-cache depends libx265-dev | grep Depends | grep libx265 | cut -d: -f2) \
+    libfdk-aac1 \
+    libmp3lame0 \
+    libopenjp2-7 \
+    librsvg2-2 \
+    libvidstab1.1 \
+    libvorbis0a \
+    libvpx6 \
+    libwebp6 \
+    libxvidcore4 \
+    libzmq5 \
+    librtmp1 \
+    libwebpmux3 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN export LIBVA_DRIVER_NAME=iHD
