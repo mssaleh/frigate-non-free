@@ -177,6 +177,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libzmq5 \
     librtmp1 \
     libwebpmux3 \
+    && apt-get full-upgrade -y && apt autoremove --purge -y && apt autoclean -y && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
 RUN export LIBVA_DRIVER_NAME=iHD
