@@ -146,6 +146,10 @@ RUN apt purge -y comerr-dev flite1-dev frei0r-plugins-dev gir1.2-freedesktop \
     opencl-c-headers perl-openssl-defaults uuid-dev x11proto-core-dev x11proto-dev \
     x11proto-input-dev x11proto-randr-dev x11proto-scrnsaver-dev x11proto-xext-dev \
     x11proto-xf86vidmode-dev x11proto-xinerama-dev xorg-sgml-doctools xtrans-dev yasm \
+    libass-dev libdrm-dev libdw-dev libkmod-dev libmfx-dev libpciaccess-dev libpixman-1-dev \
+    libprocps-dev libudev-dev libva-dev libx264-dev libx265-dev make meson yasm zlib1g-dev \
+    libmp3lame-dev libopenjp2-7-dev librsvg2-dev libvidstab-dev libvorbis-dev libvpx-dev libwebp-dev \
+    libnuma-dev libssl-dev librtmp-dev libxvidcore-dev libzmq3-dev ocl-icd-opencl-dev libfdk-aac-dev \
     && apt autoremove --purge -y && apt autoclean -y && apt clean
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
