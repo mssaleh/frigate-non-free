@@ -149,26 +149,14 @@ RUN apt purge -y comerr-dev flite1-dev frei0r-plugins-dev gir1.2-freedesktop \
     && apt autoremove --purge -y && apt autoclean -y && apt clean
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    intel-media-va-driver-non-free \
     libgomp1 \
-    libigfxcmrt7 \
+    intel-opencl-icd \
+    intel-media-va-driver-non-free \
     libmfx1 \
     libmfx-tools \
-    libnginx-mod-http-lua \
-    libnginx-mod-rtmp \
     libva-drm2 \
-    libva-x11-2 \
-    libxcb-shm0 \
-    linux-tools-generic \
-    man-db \
-    nginx \
     pciutils \
     psmisc \
-    python3 \
-    python3-matplotlib \
-    python3-numpy \
-    python3-pip \
-    socat \
     tmux \
     vainfo \
     $(apt-cache depends libx264-dev | grep Depends | grep libx264 | cut -d: -f2) \
