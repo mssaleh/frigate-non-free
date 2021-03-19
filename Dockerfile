@@ -5,8 +5,7 @@ RUN apt-get update && \
     ca-certificates \
     curl \
     gpg-agent \
-    software-properties-common \
-    sudo
+    software-properties-common
 
 ARG APT_GRAPHICS_REPO="https://repositories.intel.com/graphics/ubuntu focal main"
 RUN curl -fsSL https://repositories.intel.com/graphics/intel-graphics.key | apt-key add -
