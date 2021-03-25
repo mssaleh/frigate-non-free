@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get full-upgrade -y && apt autoremove --purge -y && apt autoclean -y && apt clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN export LIBVA_DRIVER_NAME=iHD
+# RUN export LIBVA_DRIVER_NAME=iHD
 
 # ENV FONTCONFIG_PATH=/usr/bin/fc-cache
 # ENV FONTCONFIG_FILE=/etc/fonts
