@@ -8,10 +8,10 @@ RUN apt-get update && \
     software-properties-common
 
 ARG APT_GRAPHICS_REPO="https://repositories.intel.com/graphics/ubuntu focal main"
-RUN curl -fsSL https://repositories.intel.com/graphics/intel-graphics.key | apt-key add -
-RUN apt-add-repository "deb ${APT_GRAPHICS_REPO}"
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN curl -fsSL https://repositories.intel.com/graphics/intel-graphics.key | apt-key add - \
+    && apt-add-repository "deb ${APT_GRAPHICS_REPO}" \
+    && apt-get update && apt-get install -y --no-install-recommends \
     intel-media-va-driver-non-free \
     libmfx1 \
     libva-drm2 \
