@@ -16,8 +16,9 @@ RUN curl -fsSL https://repositories.intel.com/graphics/intel-graphics.key | apt-
     intel-media-va-driver-non-free \
     libmfx1 \
     libva-drm2 \
-    && apt-get full-upgrade -y && apt autoremove --purge -y && apt autoclean -y && apt clean \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get full-upgrade -y && apt autoremove --purge -y && apt autoclean -y && apt clean
+#     && apt-get full-upgrade -y && apt autoremove --purge -y && apt autoclean -y && apt clean \
+#     && rm -rf /var/lib/apt/lists/*
 
 RUN export LIBVA_DRIVER_NAME=iHD
 
@@ -97,8 +98,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --no-instal
     xsltproc \
     yasm \
     zlib1g-dev \
-    && apt-get full-upgrade -y && apt autoremove --purge -y && apt autoclean -y && apt clean \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get full-upgrade -y && apt autoremove --purge -y && apt autoclean -y && apt clean
 
 ARG FFMPEG_VERSION=4.3.2
 ARG PREFIX=/opt/ffmpeg
