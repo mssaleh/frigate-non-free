@@ -152,7 +152,7 @@ RUN mkdir -p ${FFMPEG_SRC} \
     && make tools/zmqsend && cp tools/zmqsend ${PREFIX}/bin/ \
     && make distclean \
     && hash -r \
-    && cd ${FFMPEG_SRC}/ffmpeg/tools \
+    && cd ${FFMPEG_SRC}/ffmpeg-${FFMPEG_VERSION}/tools \
     && make qt-faststart && cp qt-faststart ${PREFIX}/bin/ \
     && cp ${PREFIX}/bin/* /usr/local/bin/ \
     && cp -a ${PREFIX}/lib/* /usr/local/lib/ \
