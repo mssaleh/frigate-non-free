@@ -104,14 +104,10 @@ ARG FFMPEG_VERSION=4.3.2
 ARG PREFIX=/opt/ffmpeg
 ARG FFMPEG_SRC=/opt/ffmpeg_sources
 
-# RUN mkdir -p ${FFMPEG_SRC} \
-#     && wget -O ${FFMPEG_SRC}/ffmpeg.tar.bz2 https://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 \
-#     && cd ${FFMPEG_SRC} && tar xjvf ffmpeg.tar.bz2
-
 RUN mkdir -p ${FFMPEG_SRC} \
-    && wget -O ${FFMPEG_SRC}/ffmpeg.tar.bz2 https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 \
+    && wget -O ${FFMPEG_SRC}/ffmpeg.tar.bz2 http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.bz2 \
     && cd ${FFMPEG_SRC} && tar xjvf ffmpeg.tar.bz2 \
-    && cd ${FFMPEG_SRC}/ffmpeg \
+    && cd ${FFMPEG_SRC}/ffmpeg-${FFMPEG_VERSION} \
     && ./configure \
     --bindir="/usr/local/bin" \
     --disable-doc \
