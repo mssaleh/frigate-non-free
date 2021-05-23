@@ -210,5 +210,5 @@ RUN apt purge -y comerr-dev flite1-dev frei0r-plugins-dev gir1.2-freedesktop \
     libprocps-dev libudev-dev libva-dev libx264-dev libx265-dev make meson yasm zlib1g-dev \
     libmp3lame-dev libopenjp2-7-dev librsvg2-dev libvidstab-dev libvorbis-dev libvpx-dev libwebp-dev \
     libnuma-dev libssl-dev librtmp-dev libxvidcore-dev libzmq3-dev ocl-icd-opencl-dev libfdk-aac-dev \
-    && apt-get full-upgrade -y && apt autoremove --purge -y && apt autoclean -y && apt clean \
+    && apt autoclean -y && apt clean \
     && rm -rf /var/lib/apt/lists/*
